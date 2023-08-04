@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <head></head>
   <body>
     <div id="root"></div>
   </body>
@@ -7,48 +8,108 @@
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
-    const root = document.getElementById("root");
-    function App() {
+    function MinutesToHours() {
       const [amount, setAmount] = React.useState();
-      const [flipped, setFlipped] = React.useState(false);
+      const [inverted, setInverted] = React.useState(false);
       const onChage = (event) => {
         setAmount(event.target.value);
       };
       const reset = () => setAmount(0);
       const onFlip = () => {
         reset();
-        setFlipped((current) => !current);
+        setInverted((current) => !current);
       };
       return (
         <div>
-          <h1>Super Converter</h1>
           <div>
             <label htmlFor="minutes">Minutes</label>
             <input
-              value={flipped ? amount * 60 : amount}
+              value={inverted ? amount * 60 : amount}
               id="minutes"
               placeholder="Minutes"
               type="number"
               onChange={onChage}
-              disabled={flipped === true}
+              disabled={inverted === true}
             />
           </div>
           <div>
             <label htmlFor="hours">Hours</label>
             <input
-              value={flipped ? amount : amount / 60}
+              value={inverted ? amount : amount / 60}
               id="hours"
               placeholder="Hours"
               type="number"
               onChange={onChage}
-              disabled={flipped === false}
+              disabled={inverted === false}
             />
           </div>
           <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>Flip</button>
+          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
         </div>
       );
     }
+    function KmToMiles() {
+      const [amount, setAmount] = React.useState();
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onFlip = (event) => {
+        reset();
+        setInverted((current) => !current);
+      };
+
+      return (
+        <div>
+          <div>
+            <label for="km">Kilometer</label>
+            <input
+              value={inverted ? amount * 1.609 : amount}
+              id="km"
+              type="number"
+              placeholder="Km"
+              onChange={onChange}
+              disabled={inverted === true}
+            />
+          </div>
+          <div>
+            <label for="mile">Mile</label>
+            <input
+              value={inverted ? amount : amount / 1.609}
+              id="mile"
+              type="number"
+              placeholder="Mile"
+              onChange={onChange}
+              disabled={inverted === false}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
+        </div>
+      );
+    }
+    function App() {
+      const [index, setIndex] = React.useState("xx");
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="xx">Select your units</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "xx" ? "Please Select Your Units" : null}
+          {index === "0" ? <MinutesToHours /> : null}
+          {index === "1" ? <KmToMiles /> : null}
+        </div>
+      );
+    }
+    const root = document.getElementById("root");
     ReactDOM.render(<App />, root);
   </script>
 </html>
